@@ -1,0 +1,137 @@
+@startuml
+class TypesFinancement<< (D,#FF7700) DataType>> {
+  fonctionnement
+  matériel
+}
+
+class LignesBugetaires << (D,#FF7700) DataType>>
+{
+  montant : integer
+  objetglobal : varchar
+  typefinancement : TypesFinancement
+}
+
+package GestionEnAmontProjet <<Node>> {
+
+
+abstract class MembresLaboratoire
+
+
+PropositonProjet "0-N" -- "0-N" Financeurs 
+(PropositonProjet , Financeurs ) . Label 
+
+Financeurs"1-N" -left-"0-N" Organisme : Crée >
+Organisme"1"-left-"0-N" AppelProjet : Publie >
+Financeurs"0-1" o-left-"1"EmployéContact : Emploie >
+
+
+Financeurs <|-- Ville
+Financeurs <|-right- Entreprise
+Financeurs <|-right- Region
+Financeurs <|-- Pays
+Financeurs <|-- Laboratoire
+
+Laboratoire *--"1-N                                     "MembresLaboratoire : Emploie >
+MembresLaboratoire <|-left- EnseignantsChercheurs
+MembresLaboratoire <|-left- IngénieurDeRecherche
+MembresLaboratoire <|-left- Doctorants
+
+
+
+MembresLaboratoire "1-N"--"0-N" PropositonProjet : Est rédigée par <
+
+AppelProjet "1"--"0-N" PropositonProjet : Est déposée sur <
+
+MembresComitePersonne  "1-N"--* AppelProjet : Est géré par <
+}
+
+
+package GestionEnAvalProjet <<Node>> {
+
+abstract class MembresProjet 
+
+PropositonProjet "1"-right-"0-1" Projet : Est à l'origine >
+
+
+Projet *--right-"1-N" MembresProjet : Est composé de >
+
+MembresProjet <|-- MembresInternes
+MembresProjet <|-- MembresExternes
+
+MembresExternes "0-N"--"1" Financeurs : Est employé par >
+
+
+MembresLaboratoire "1"--"0-1" MembresInternes: Est-un <
+
+MembresProjet "1"--"0-N" Dépenses : Demande >
+MembresProjet "1"--"0-N" Dépenses : Valide >
+
+
+}
+
+Financeurs : DateDebut : date
+Financeurs : DateFin : date
+
+MembresComitePersonne : Nom : varchar
+MembresComitePersonne : Mail: varchar
+
+EmployéContact : Titre : varchar
+EmployéContact : Mail : varchar
+EmployéContact : Telephone : integer
+
+Organisme : Nom : varchar {key}
+Organisme : DateCreation : date
+Organisme : DateDisparition [0..1] : date
+
+AppelProjet : DateLancement : date
+AppelProjet : DateFin : date
+AppelProjet : Theme: varchar
+AppelProjet : Description : varchar
+
+PropositonProjet : Budget : integer
+PropositonProjet : Lignesbudgetaires [1..*] : LignesBudgetaires
+PropositonProjet : DateDeposition : date
+PropositonProjet : DateReponse [0..1] : date
+PropositonProjet : Reponse [0..1] : {Acceptation | Refus}
+
+Projet : DateDebut : date
+Projet : DateFin : date
+Projet : Budget : integer
+
+Dépenses : DateRealisation : date
+Dépenses : Montant : integer
+Dépenses : TypeFinancement: TypesFinancement
+
+class MembresComitePersonne
+
+MembresProjet : Nom : varchar
+MembresProjet : Fonction : varchar
+MembresProjet : Mail : varchar
+
+
+note " Un MembresExterne n'est pas employé du laboratoire" as N2
+Financeurs .. N2
+N2 .. MembresExternes 
+
+
+class Dépenses
+note bottom : Une dépense est forcément demandée et validée par deux membres du projet différents
+
+
+EnseignantsChercheurs : QuotiteTempsRecherche : integer
+EnseignantsChercheurs : Etablissement : varchar
+
+IngénieurDeRecherche : DomaineSpecialite : varchar
+
+Doctorants : DateDebutThese : date
+Doctorants : DateFinThese [0..1] : date
+Doctorants : SujetThese : varchar
+
+Region : Nom : varchar {key}
+Entreprise : Nom : varchar {key}
+Ville : Nom : varchar {key}
+Pays : Nom : varchar {key}
+Laboratoire : Nom : varchar {key}
+
+Label : Nom : varchar {local key}
+@enduml

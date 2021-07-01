@@ -1,0 +1,300 @@
+Modèle logique de données
+
+
+Note: Tous les attributs sont considérés comme NOT NULL sauf si on précise le contraire.
+
+MLD DES CLASSES
+
+// HERITAGE PAR REFERENCE
+
+Financeurs (#id : integer, datedebut : date, datefin : date, idEmployeContact => EmployeContact) 
+
+EXPLICATION NORMALISATION 
+
+la relation Financeurs possède une clé et tous ses attributs sont atomiques (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu que ma clé est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin je n'ai pas d'attribut non clé qui détermine ma clé (BCNF) => Donc BCNF
+
+
+Ville (#idfinanceur => Financeurs, nom :text) avec nom key
+
+EXPLICATION NORMALISATION
+
+la relation Ville possède une clé et son attribut est atomique (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu que ma clé est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mon unique attribut non clé ne détermine pas ma clé (BCNF) => Donc BCNF
+
+Region (#idfinanceur => Financeurs, nom :text) avec nom key
+
+EXPLICATION NORMALISATION 
+
+la relation Region possède une clé et son attribut est atomique (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu que ma clé est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mon unique attribut non clé ne détermine pas ma clé (BCNF) => Donc BCNF
+
+Entreprise (#idfinanceur => Financeurs, nom :text) avec nom key
+
+EXPLICATION NORMALISATION 
+
+la relation Region possède une clé et son attribut est atomique (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu que ma clé est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mon unique attribut non clé ne détermine pas ma clé (BCNF) => Donc BCNF
+
+Pays (#idfinanceur => Financeurs, nom :text) avec nom key
+
+EXPLICATION NORMALISATION 
+
+la relation Pays possède une clé et son attribut est atomique (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu que ma clé est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mon unique attribut non clé ne détermine pas ma clé (BCNF) => Donc BCNF
+
+Laboratoire (#idfinanceur => Financeurs, nom :text) avec nom key
+
+EXPLICATION NORMALISATION 
+
+la relation Laboratoire possède une clé et son attribut est atomique (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu que ma clé est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mon unique attribut non clé ne détermine pas ma clé (BCNF) => Donc BCNF
+
+CONTRAINTE HERITAGE PAR REFERENCE
+
+Contraintes pour éviter qu’un financeur soit de deux types:
+
+INTERSECTION(PROJECTION(Pays,id),PROJECTION(Region,id))={}
+INTERSECTION(PROJECTION(Pays,id),PROJECTION(Ville,id))={}
+INTERSECTION(PROJECTION(Pays,id),PROJECTION(Laboratoire,id))={}
+INTERSECTION(PROJECTION(Pays,id),PROJECTION(Entreprise,id))={}
+
+INTERSECTION(PROJECTION(Laboratoire,id),PROJECTION(Region,id))={}
+INTERSECTION(PROJECTION(Laboratoire,id),PROJECTION(Ville,id))={}
+INTERSECTION(PROJECTION(Laboratoire,id),PROJECTION(Entreprise,id))={}
+
+INTERSECTION(PROJECTION(Entreprise,id),PROJECTION(Region,id))={}
+INTERSECTION(PROJECTION(Laboratoire,id),PROJECTION(Ville,id))={}
+
+INTERSECTION(PROJECTION(Region,id),PROJECTION(Ville,id))={}
+
+
+VUES :
+
+vLaboratoire = jointure(Financeurs,Laboratoires, id=idfinanceur)
+vPays = jointure(Financeurs,Pays, id=idfinanceur)
+vRegion = jointure(Financeurs,Region, id=idfinanceur)
+vEntreprise = jointure(Financeurs,Entreprise, id=idfinanceur)
+vVille = jointure(Financeurs,vVille, id=idfinanceur)
+
+
+EmployeContact (#id : integer, titre : varchar, mail : varchar, telephone : integer)
+
+EXPLICATION NORMALISATION 
+
+la relation EmployeContact possède une clé et son attribut est atomique (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu que ma clé est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé en effet le titre, le mail,le numero de telephone peuvent changer (3NF),
+enfin mon unique attribut non clé ne détermine pas ma clé (BCNF) => Donc BCNF
+
+
+Organisme (#nom : varchar, datecreation : date, datedisparition : date) avec datedisparition null, datedisparition > datecreation
+
+EXPLICATION NORMALISATION 
+
+la relation EmployeContact possède une clé et son attribut est atomique (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu que ma clé est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé en effet le titre, le mail,le numero de telephone peuvent changer (3NF),
+enfin mes attributs attributs non clé ne déterminent pas ma clé (BCNF) => Donc BCNF
+
+
+AppelProjet (#id : integer, datelancement : date, datefin : date, theme : varchar, description : varchar, idOrganisme => Organisme) avec datelancement < datefin
+
+EXPLICATION NORMALISATION 
+
+la relation EmployeContact possède une clé et son attribut est atomique (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu que ma clé est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mes attributs non clé ne déterminent pas ma clé (BCNF) => Donc BCNF
+
+
+MembresComitePersonne (#id : integer, #idAppelProjet => AppelProjet , nom : varchar, mail : varchar) avec (id, idAppelProjet) key
+
+EXPLICATION NORMALISATION 
+
+la relation MembresComitePersonne possède une clé composée et ses attributs sont atomiques (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mes attributs non clé ne déterminent pas une partie de ma clé (BCNF) => Donc BCNF
+
+
+// HERTITAGE PAR CLASSE MERE
+
+MembresLaboratoire (#id : integer, #idLaboratoire=>Laboratoire, quotitetempsrecherche :integer, etablissement : varchar, datedebutthese : date, datefinthese : date, sujettehse : varchar,  DomaineSpecialite : varchar, type = {EnseignantChercheur | Doctorant | IngénieurDeRecherche}) 
+avec (id, idLaboratoire) key, datedebutthese < datefinthese if datefinthse not null, quotitetempsrecherche null, etablissement null, datedebutthese null, datefinthese null, sujettehse null,  DomaineSpecialite null
+
+EXPLICATION NORMALISATION 
+
+la relation MembresLaboratoire possède une clé composée et ses attributs sont atomiques (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mes attributs non clé ne déterminent pas une partie de ma clé (BCNF) => Donc BCNF
+
+CONTRAINTE : 
+
+((quotitetempsrecherche is not null and etablissement is not null and datedebutthese is null and datefinthese is null and sujetthese is null and domainespecialite is null and type='enseignantchercheur')
+	or(quotitetempsrecherche is null and etablissement is null and datedebutthese is not null and (datefinthese is null or datefinthese is not null) and sujetthese is not null and domainespecialite is null and type='doctorant')
+	or(quotitetempsrecherche is  null and etablissement is null and datedebutthese is null and datefinthese is null and sujetthese is null and domainespecialite is not null and type='ingenieurderecherche'))
+
+VUES :
+
+Venseignantchercheur = PROJECTION(RESTRICTION(MembresLaboratoire,type='enseignantchercheur'),quotitetempsrecherche,etablissement)
+Vdoctorant = PROJECTION(RESTRICTION(MembresLaboratoire,type='doctorant'),datedebutthese,datefinthese,sujetthese)
+Vingenieurderecherche = PROJECTION(RESTRICTION(MembresLaboratoire,type='ingenieurderecherche'),domainespecialite)
+
+
+// HERTITAGE PAR CLASSE MERE
+ 
+MembresProjet (#id : integer, #idProjet => Projet nom :varchar, fonction : varchar, mail : varchar, idMembreLaboratoire => MembresLaboratoire, idLaboratoire => MembresLaboratoire, idFinanceur => Financeurs, type : (MembresInternes|MembresExternes)   ) avec (id, idProjet) key
+
+EXPLICATION NORMALISATION 
+
+la relation MembresProjet possède une clé composée et ses attributs sont atomiques (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mes attributs non clé ne déterminent pas une partie de ma clé (BCNF) => Donc BCNF
+
+
+CONTRAINTES : 
+
+(idMembresLaboratoire not null and idlaboratoire not null and type = MembresInternes) or (idFinanceur and type = MembresExternes)
+not ((idMembresLaboratoire not null and type = MembresExternes) or (idLaboratoire not null and type = MembresExternes))
+not (idFinanceur not null and type = MembresInternes)
+
+VUES : 
+VMembresInternes = PROJECTION(RESTRICTION(MembresProjet,type='MembresInternes'),idMembresLaboratoire, idlaboratoire)
+VMembresExternes = PROJECTION(RESTRICTION(MembresProjet,type='MembresExternes'),idFinanceur)
+
+
+Depenses (#id : integer, montant : integer, typefinancement_fonctionnement, typefinancement_materiel, idDemandeMembreProjet => MembreProjet, idValideMembreProjet => MembreProjet,idDemandeProjet => MembreProjet, idValideProjet => MembreProjet)
+
+EXPLICATION NORMALISATION 
+
+la relation Depenses possède une clé composée et ses attributs sont atomiques (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mes attributs non clé ne déterminent pas une partie de ma clé (BCNF) => Donc BCNF
+
+CONTRAINTES DEPENSES : (idDemandeMembreProjet => MembreProjet <> idValideMembreProjet => MembreProjet) and (idDemandeProjet => MembreProjet = idValideProjet => MembreProjet) 
+
+
+PropositionProjet (#id : integer, budget : integer, datedeposition : date, datereponse : date, reponse : {acceptation | refus}, idAppelProjet => AppelProjet) avec datereponse,reponse null, datelancement <= datedeposition <= datefin, datedepostion <= datereponse
+
+EXPLICATION NORMALISATION 
+
+la relation PropositionProjet possède une clé composée et ses attributs sont atomiques (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mes attributs non clé ne déterminent pas une partie de ma clé (BCNF) => Donc BCNF
+
+
+LignesBudgetaires (#lignesbudgetaires_montant : integer , #lignesbudgetaires_objetglobal : varchar, #lignesbudgetaires_typefinancement : {fonctionnement | materiel}, #idPropositionProjet => PropositionProjet)
+
+EXPLICATION NORMALISATION 
+
+la relation PropositionProjet possède une clé composée et ses attributs sont atomiques (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mes attributs non clé ne déterminent pas une partie de ma clé (BCNF) => Donc BCNF
+
+
+Projet (#id : integer, datedebut : date, datefin : date, idPropositionProjet => PropositionProjet, budget : integer)
+
+EXPLICATION NORMALISATION 
+
+la relation Projet possède une clé  et ses attributs sont atomiques (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé vu qu'elle est simple (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé (3NF),
+enfin mes attributs non clé ne déterminent pas ma clé (BCNF) => Donc BCNF
+
+CONTRAINTE BUDGET (le budget d'un projet doit être identique à celui de la proposition) : PROJECTION (PropositionProjet, id, budget) = PROJECTION (Projet, idPropositionProjet, budget)
+(le budget total doit être égale à la somme des lignes budgétaires gestion en SQL) 
+
+
+MLD DES ASSOCIATIONS
+
+
+Label (#idPropositionProjet => PropositionProjet, #idFinanceurs => Financeurs,#nom : varchar) avec  primary key (idpropositionprojet,idfianceurs,nom)
+
+EXPLICATION NORMALISATION 
+
+la relation Label possède une clé composée de tous ses attributs (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé car il y en a pas d'autres (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé car il n'y en a pas  (3NF),
+enfin mes attributs non clé ne déterminent pas une partie de ma clé car il n'y en pas (BCNF) => Donc BCNF
+
+Cree (#idFinanceurs => Financeurs, #nom => Organisme) avec (idFinanceurs,nom) key
+
+EXPLICATION NORMALISATION 
+
+la relation Cree possède une clé composée de tous ses attributs (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé car il y en a pas d'autres (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé car il n'y en a pas  (3NF),
+enfin mes attributs non clé ne déterminent pas une partie de ma clé car il n'y en pas (BCNF) => Donc BCNF
+
+
+CONTRAINTE : PROJECTION (Organisme,nom) = PROJECTION (Cree, nom)
+
+
+EstRedigeePar (#idPropositionProjet => PropositionProjet, #idMembresLaboratoire => MembresLaboratoire, #idLaboratoire => MembresLaboratoire) avec (idPropositionProjet, idMembresLaboratoire,idLaboratoire) key
+
+CONTRAINTE : PROJECTION (PropositionProjet,id) = PROJECTION (EstRedigeePar, idPropositionProjet)
+
+EXPLICATION NORMALISATION 
+
+la relation EstRedigeePar possède une clé composée de tous ses attributs (1NF), 
+de plus je n'ai pas une partie de la clé qui détermine un attribut non clé car il y en a pas d'autres (2NF), 
+ensuite je n'ai aucun attribut non clé qui détermine un autre atrribut non clé car il n'y en a pas  (3NF),
+enfin mes attributs non clé ne déterminent pas une partie de ma clé car il n'y en pas (BCNF) => Donc BCNF
+
+CONTRAINTES MembresComitePersonne (Contrainte de composition)
+PROJECTION (AppelProjet,id) = PROJECTION(MembresComitePersonne,idAppelProjet)
+
+
+CONTRAINTES MembresLaboratoire (Contrainte de composition)
+PROJECTION (Laboratoire,id) = PROJECTION(MembresLaboratoire,idLaboratoire)
+
+
+CONTRAINTES MembresProjet (Contrainte de composition)
+PROJECTION (Projet,id) = PROJECTION(MembresProjet,idProjet)
+
+
+
+CONTRAINTE EstemployePar "Un membre externe ne peut pas être l'employé du laboratoire"
+INTERSECTION (PROJECTION(MembresExterne, idFinanceur), PROJECTION(Laboratoire, id)) = {}
+
+
+CONTRAINTE Les membres du comité de personnes ne peuvent pas être membre du projet
+INTERSECTION(PROJECTION(MembresComitePersonne,id),PROJECTION(MembresProjet,id))
+
+
+
+CREATION DE QUELQUES VUES SUPPLEMENTAIRES :
+
+/*Afficher les appels d'offre en cours non répondus*/
+
+projection (restriction(jointureexternegauche(appelprojet,propositionprojet;appelprojet.id=propositionprojet.idappelprojet), propositionprojet.idappelprojet is null and appelprojet.datefin > CURRENT_DATE), appelprojet.id)
+
+
+/*Afficher les projet en cours*/
+
+projection(restriction (projet; datedebut <= current_date and datefin > current_date), id)
+
+
+
+
+
+
+
